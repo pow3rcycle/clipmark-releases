@@ -1,0 +1,16 @@
+<svg width="256" height="256" viewBox="0 0 76 76" xmlns="http://www.w3.org/2000/svg">
+  <!-- ClipMark "Viewfinder" mark. Geometry/colors verbatim from
+       src/ClipMark.App/PebbleChrome.cs (ViewfinderTicks) and PebbleTokens.cs
+       (Stone #F4F7FB, Border #D3D8DD, Ink #313F4D (Slate+Sky), AccentBright #5B9DDF). -->
+  <rect x="0.5" y="0.5" width="75" height="75" rx="23.5" ry="23.5"
+        fill="#F4F7FB" stroke="#D3D8DD" stroke-width="1"/>
+  <g transform="translate(15,15) scale(1.9166667)">
+    <path d="M9,4.5 H7.2 C5.7,4.5 4.5,5.7 4.5,7.2 V9
+             M15,4.5 H16.8 C18.3,4.5 19.5,5.7 19.5,7.2 V9
+             M9,19.5 H7.2 C5.7,19.5 4.5,18.3 4.5,16.8 V15
+             M15,19.5 H16.8 C18.3,19.5 19.5,18.3 19.5,16.8 V15"
+          fill="none" stroke="#313F4D" stroke-width="2.4"
+          stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="13.8" cy="10.2" r="2.6" fill="#5B9DDF"/>
+  </g>
+</svg>
