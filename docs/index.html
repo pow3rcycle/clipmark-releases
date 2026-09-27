@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ClipMark</title>
-<meta name="description" content="ClipMark captures any part of your screen and hands it straight to a fast annotation editor: arrows, callouts, redaction, OCR, pins and a whiteboard. For Windows and macOS.">
+<meta name="description" content="Capture any part of your screen and annotate it with arrows, text, numbered steps and blur. Includes OCR, pin to screen and a whiteboard. For Windows and macOS.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#E9EDF2" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#172029" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
-<meta property="og:title" content="ClipMark: capture it, mark it up, send it">
-<meta property="og:description" content="A screenshot, annotation and screen-recording utility for Windows and macOS.">
+<meta property="og:title" content="ClipMark: capture any part of your screen and mark it up">
+<meta property="og:description" content="A screenshot and annotation app for Windows and macOS. Screen recording on Windows.">
 <meta property="og:url" content="https://pow3rcycle.github.io/clipmark-releases/">
 <meta property="og:image" content="https://pow3rcycle.github.io/clipmark-releases/assets/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,7 @@
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true"><!-- Icons: Phosphor Icons (regular), MIT licence, phosphoricons.com -->
-<symbol id="i-apple-logo" viewBox="0 0 256 256" fill="currentColor"><path d="M223.3,169.59a8.07,8.07,0,0,0-2.8-3.4C203.53,154.53,200,134.64,200,120c0-17.67,13.47-33.06,21.5-40.67a8,8,0,0,0,0-11.62C208.82,55.74,187.82,48,168,48a72.2,72.2,0,0,0-40,12.13,71.56,71.56,0,0,0-90.71,9.09A74.63,74.63,0,0,0,16,123.4a127.06,127.06,0,0,0,40.14,89.73A39.8,39.8,0,0,0,83.59,224h87.68a39.84,39.84,0,0,0,29.12-12.57,125,125,0,0,0,17.82-24.6C225.23,174,224.33,172,223.3,169.59Zm-34.63,30.94a23.76,23.76,0,0,1-17.4,7.47H83.59a23.82,23.82,0,0,1-16.44-6.51A111.14,111.14,0,0,1,32,123,58.5,58.5,0,0,1,48.65,80.47,54.81,54.81,0,0,1,88,64h.78A55.45,55.45,0,0,1,123,76.28a8,8,0,0,0,10,0A55.44,55.44,0,0,1,168,64a70.64,70.64,0,0,1,36,10.35c-13,14.52-20,30.47-20,45.65,0,23.77,7.64,42.73,22.18,55.3A105.82,105.82,0,0,1,188.67,200.53ZM128.23,30A40,40,0,0,1,167,0h1a8,8,0,0,1,0,16h-1a24,24,0,0,0-23.24,18,8,8,0,1,1-15.5-4Z"/></symbol>
+<symbol id="i-apple-logo" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><!-- Apple mark silhouette (Simple Icons, CC0) drawn as an outline --><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.220-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701z"/></symbol>
 <symbol id="i-arrow-bend-up-right" viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,109.66l-48,48a8,8,0,0,1-11.32-11.32L204.69,112H128a88.1,88.1,0,0,0-88,88,8,8,0,0,1-16,0A104.11,104.11,0,0,1,128,96h76.69L170.34,61.66a8,8,0,0,1,11.32-11.32l48,48A8,8,0,0,1,229.66,109.66Z"/></symbol>
 <symbol id="i-arrows-clockwise" viewBox="0 0 256 256" fill="currentColor"><path d="M224,48V96a8,8,0,0,1-8,8H168a8,8,0,0,1,0-16h28.69L182.06,73.37a79.56,79.56,0,0,0-56.13-23.43h-.45A79.52,79.52,0,0,0,69.59,72.71,8,8,0,0,1,58.41,61.27a96,96,0,0,1,135,.79L208,76.69V48a8,8,0,0,1,16,0ZM186.41,183.29a80,80,0,0,1-112.47-.66L59.31,168H88a8,8,0,0,0,0-16H40a8,8,0,0,0-8,8v48a8,8,0,0,0,16,0V179.31l14.63,14.63A95.43,95.43,0,0,0,130,222.06h.53a95.36,95.36,0,0,0,67.07-27.33,8,8,0,0,0-11.18-11.44Z"/></symbol>
 <symbol id="i-arrows-down-up" viewBox="0 0 256 256" fill="currentColor"><path d="M117.66,170.34a8,8,0,0,1,0,11.32l-32,32a8,8,0,0,1-11.32,0l-32-32a8,8,0,0,1,11.32-11.32L72,188.69V48a8,8,0,0,1,16,0V188.69l18.34-18.35A8,8,0,0,1,117.66,170.34Zm96-96-32-32a8,8,0,0,0-11.32,0l-32,32a8,8,0,0,0,11.32,11.32L168,67.31V208a8,8,0,0,0,16,0V67.31l18.34,18.35a8,8,0,0,0,11.32-11.32Z"/></symbol>
@@ -39,13 +39,15 @@
 <symbol id="i-highlighter" viewBox="0 0 256 256" fill="currentColor"><path d="M253.66,106.34a8,8,0,0,0-11.32,0L192,156.69,107.31,72l50.35-50.34a8,8,0,1,0-11.32-11.32L96,60.69A16,16,0,0,0,93.18,79.5L72,100.69a16,16,0,0,0,0,22.62L76.69,128,18.34,186.34a8,8,0,0,0,3.13,13.25l72,24A7.88,7.88,0,0,0,96,224a8,8,0,0,0,5.66-2.34L136,187.31l4.69,4.69a16,16,0,0,0,22.62,0l21.19-21.18A16,16,0,0,0,203.31,168l50.35-50.34A8,8,0,0,0,253.66,106.34ZM93.84,206.85l-55-18.35L88,139.31,124.69,176ZM152,180.69,83.31,112,104,91.31,172.69,160Z"/></symbol>
 <symbol id="i-list-numbers" viewBox="0 0 256 256" fill="currentColor"><path d="M224,128a8,8,0,0,1-8,8H104a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM104,72H216a8,8,0,0,0,0-16H104a8,8,0,0,0,0,16ZM216,184H104a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16ZM43.58,55.16,48,52.94V104a8,8,0,0,0,16,0V40a8,8,0,0,0-11.58-7.16l-16,8a8,8,0,0,0,7.16,14.32ZM79.77,156.72a23.73,23.73,0,0,0-9.6-15.95,24.86,24.86,0,0,0-34.11,4.7,23.63,23.63,0,0,0-3.57,6.46,8,8,0,1,0,15,5.47,7.84,7.84,0,0,1,1.18-2.13,8.76,8.76,0,0,1,12-1.59A7.91,7.91,0,0,1,63.93,159a7.64,7.64,0,0,1-1.57,5.78,1,1,0,0,0-.08.11L33.59,203.21A8,8,0,0,0,40,216H72a8,8,0,0,0,0-16H56l19.08-25.53A23.47,23.47,0,0,0,79.77,156.72Z"/></symbol>
 <symbol id="i-magnifying-glass-plus" viewBox="0 0 256 256" fill="currentColor"><path d="M152,112a8,8,0,0,1-8,8H120v24a8,8,0,0,1-16,0V120H80a8,8,0,0,1,0-16h24V80a8,8,0,0,1,16,0v24h24A8,8,0,0,1,152,112Zm77.66,117.66a8,8,0,0,1-11.32,0l-50.06-50.07a88.11,88.11,0,1,1,11.31-11.31l50.07,50.06A8,8,0,0,1,229.66,229.66ZM112,184a72,72,0,1,0-72-72A72.08,72.08,0,0,0,112,184Z"/></symbol>
+<symbol id="i-pause" viewBox="0 0 256 256" fill="currentColor"><path d="M200,32H160a16,16,0,0,0-16,16V208a16,16,0,0,0,16,16h40a16,16,0,0,0,16-16V48A16,16,0,0,0,200,32Zm0,176H160V48h40ZM96,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V48A16,16,0,0,0,96,32Zm0,176H56V48H96Z"/></symbol>
+<symbol id="i-play" viewBox="0 0 256 256" fill="currentColor"><path d="M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z"/></symbol>
 <symbol id="i-push-pin" viewBox="0 0 256 256" fill="currentColor"><path d="M235.32,81.37,174.63,20.69a16,16,0,0,0-22.63,0L98.37,74.49c-10.66-3.34-35-7.37-60.4,13.14a16,16,0,0,0-1.29,23.78L85,159.71,42.34,202.34a8,8,0,0,0,11.32,11.32L96.29,171l48.29,48.29A16,16,0,0,0,155.9,224c.38,0,.75,0,1.13,0a15.93,15.93,0,0,0,11.64-6.33c19.64-26.1,17.75-47.32,13.19-60L235.33,104A16,16,0,0,0,235.32,81.37ZM224,92.69h0l-57.27,57.46a8,8,0,0,0-1.49,9.22c9.46,18.93-1.8,38.59-9.34,48.62L48,100.08c12.08-9.74,23.64-12.31,32.48-12.31A40.13,40.13,0,0,1,96.81,91a8,8,0,0,0,9.25-1.51L163.32,32,224,92.68Z"/></symbol>
 <symbol id="i-ruler" viewBox="0 0 256 256" fill="currentColor"><path d="M235.32,73.37,182.63,20.69a16,16,0,0,0-22.63,0L20.68,160a16,16,0,0,0,0,22.63l52.69,52.68a16,16,0,0,0,22.63,0L235.32,96A16,16,0,0,0,235.32,73.37ZM84.68,224,32,171.31l32-32,26.34,26.35a8,8,0,0,0,11.32-11.32L75.31,128,96,107.31l26.34,26.35a8,8,0,0,0,11.32-11.32L107.31,96,128,75.31l26.34,26.35a8,8,0,0,0,11.32-11.32L139.31,64l32-32L224,84.69Z"/></symbol>
 <symbol id="i-scan" viewBox="0 0 256 256" fill="currentColor"><path d="M224,40V80a8,8,0,0,1-16,0V48H176a8,8,0,0,1,0-16h40A8,8,0,0,1,224,40ZM80,208H48V176a8,8,0,0,0-16,0v40a8,8,0,0,0,8,8H80a8,8,0,0,0,0-16Zm136-40a8,8,0,0,0-8,8v32H176a8,8,0,0,0,0,16h40a8,8,0,0,0,8-8V176A8,8,0,0,0,216,168ZM40,88a8,8,0,0,0,8-8V48H80a8,8,0,0,0,0-16H40a8,8,0,0,0-8,8V80A8,8,0,0,0,40,88ZM80,72h96a8,8,0,0,1,8,8v96a8,8,0,0,1-8,8H80a8,8,0,0,1-8-8V80A8,8,0,0,1,80,72Zm8,96h80V88H88Z"/></symbol>
 <symbol id="i-selection" viewBox="0 0 256 256" fill="currentColor"><path d="M152,40a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h32A8,8,0,0,1,152,40Zm-8,168H112a8,8,0,0,0,0,16h32a8,8,0,0,0,0-16ZM208,32H184a8,8,0,0,0,0,16h24V72a8,8,0,0,0,16,0V48A16,16,0,0,0,208,32Zm8,72a8,8,0,0,0-8,8v32a8,8,0,0,0,16,0V112A8,8,0,0,0,216,104Zm0,72a8,8,0,0,0-8,8v24H184a8,8,0,0,0,0,16h24a16,16,0,0,0,16-16V184A8,8,0,0,0,216,176ZM40,152a8,8,0,0,0,8-8V112a8,8,0,0,0-16,0v32A8,8,0,0,0,40,152Zm32,56H48V184a8,8,0,0,0-16,0v24a16,16,0,0,0,16,16H72a8,8,0,0,0,0-16ZM72,32H48A16,16,0,0,0,32,48V72a8,8,0,0,0,16,0V48H72a8,8,0,0,0,0-16Z"/></symbol>
 <symbol id="i-shapes" viewBox="0 0 256 256" fill="currentColor"><path d="M71.59,61.47a8,8,0,0,0-15.18,0l-40,120A8,8,0,0,0,24,192h80a8,8,0,0,0,7.59-10.53ZM35.1,176,64,89.3,92.9,176ZM208,76a52,52,0,1,0-52,52A52.06,52.06,0,0,0,208,76Zm-88,0a36,36,0,1,1,36,36A36,36,0,0,1,120,76Zm104,68H136a8,8,0,0,0-8,8v56a8,8,0,0,0,8,8h88a8,8,0,0,0,8-8V152A8,8,0,0,0,224,144Zm-8,56H144V160h72Z"/></symbol>
 <symbol id="i-video-camera" viewBox="0 0 256 256" fill="currentColor"><path d="M251.77,73a8,8,0,0,0-8.21.39L208,97.05V72a16,16,0,0,0-16-16H32A16,16,0,0,0,16,72V184a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V159l35.56,23.71A8,8,0,0,0,248,184a8,8,0,0,0,8-8V80A8,8,0,0,0,251.77,73ZM192,184H32V72H192V184Zm48-22.95-32-21.33V116.28L240,95Z"/></symbol>
-<symbol id="i-windows-logo" viewBox="0 0 256 256" fill="currentColor"><path d="M208,136H128a8,8,0,0,0-8,8v57.45a8,8,0,0,0,6.57,7.88l80,14.54A7.61,7.61,0,0,0,208,224a8,8,0,0,0,8-8V144A8,8,0,0,0,208,136Zm-8,70.41-64-11.63V152h64ZM96,136H32a8,8,0,0,0-8,8v40a8,8,0,0,0,6.57,7.87l64,11.64a8.54,8.54,0,0,0,1.43.13,8,8,0,0,0,8-8V144A8,8,0,0,0,96,136Zm-8,50.05-48-8.73V152H88ZM213.13,33.86a8,8,0,0,0-6.56-1.73l-80,14.55A8,8,0,0,0,120,54.55V112a8,8,0,0,0,8,8h80a8,8,0,0,0,8-8V40A8,8,0,0,0,213.13,33.86ZM200,104H136V61.22l64-11.63ZM101.13,54.22a8,8,0,0,0-6.56-1.73l-64,11.64A8,8,0,0,0,24,72v40a8,8,0,0,0,8,8H96a8,8,0,0,0,8-8V60.36A8,8,0,0,0,101.13,54.22ZM88,104H40V78.68L88,70Z"/></symbol>
+<symbol id="i-windows-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><!-- Windows mark: four square panes at the official 11.377/1.246 proportions (Simple Icons, CC0), outlined inside each pane --><rect x="2.75" y="2.75" width="7.98" height="7.98"/><rect x="13.27" y="2.75" width="7.98" height="7.98"/><rect x="2.75" y="13.27" width="7.98" height="7.98"/><rect x="13.27" y="13.27" width="7.98" height="7.98"/></symbol>
 </svg>
 <a class="skip" href="#main">Skip to content</a>
 
@@ -66,8 +68,8 @@
 <main id="main">
   <div class="hero" id="top">
     <div class="wrap">
-      <h1>Screenshots that explain themselves.</h1>
-      <p class="lead">ClipMark grabs any part of your screen and drops it straight into a fast markup editor. Point with an arrow, call it out, blur what is private, then paste it wherever the conversation is.</p>
+      <h1>Capture any part of your screen and mark it up.</h1>
+      <p class="lead">Press a shortcut and drag over the area you need. Add arrows, text, numbered steps or blur in the editor, then copy or save the result.</p>
       <div class="cta-row" id="hero-cta">
         <a class="btn btn-primary" id="dl-win" data-os="win" href="https://github.com/pow3rcycle/clipmark-releases/releases/latest">
           <svg class="icon" aria-hidden="true"><use href="#i-windows-logo"/></svg>
@@ -80,49 +82,43 @@
           <span class="btn-sub" data-field="mac-sub">macOS 14 or later</span>
         </a>
       </div>
-      <p class="cta-note" id="cta-note">Installers come straight from this project's GitHub releases. <a href="#releases">See every version</a>.</p>
+      <p class="cta-note" id="cta-note">Installers are hosted on GitHub. <a href="#releases">Recent releases</a>.</p>
     </div>
 
     <div class="wrap">
       <figure class="stage" id="stage">
-        <img src="assets/hero-editor.jpg" width="1600" height="900" alt="The ClipMark editor open over a document, showing a captured chart titled Weekly capture report with five bars and two stat tiles.">
-        <svg viewBox="0 0 1600 900" aria-hidden="true" focusable="false">
-          <rect class="ann ann-hl" x="474" y="232" width="236" height="34" rx="4"/>
-          <path class="ann ann-stroke ann-draw" style="--len:660;--delay:800ms;--dur:820ms"
-            d="M752 283 C810 280 824 360 818 420 C814 490 790 530 742 528 C690 526 672 470 674 400 C676 330 700 286 764 293"/>
-          <path class="ann ann-stroke ann-draw" style="--len:150;--delay:1650ms;--dur:420ms" d="M930 516 C882 538 850 502 826 452"/>
-          <path class="ann ann-stroke ann-draw" style="--len:60;--delay:2050ms;--dur:200ms" d="M824 478 L826 452 L848 466"/>
-          <g class="ann ann-bubble">
-            <rect x="940" y="486" width="238" height="60" rx="30" fill="#D9433F"/>
-            <text x="970" y="526">Best week yet</text>
-          </g>
-          <g class="ann ann-counter">
-            <circle cx="518" cy="320" r="22" fill="#D9433F"/>
-            <text x="518" y="329" text-anchor="middle">1</text>
-          </g>
-        </svg>
-        <button class="replay" type="button" id="replay" hidden>
-          <svg class="icon-16" aria-hidden="true"><use href="#i-arrows-clockwise"/></svg>
-          Replay markup
+        <video id="hero-video" muted playsinline preload="metadata" controls poster="assets/hero-poster.jpg" width="1920" height="1080" aria-label="ClipMark product video, no sound">
+          <source src="media/clipmark-hero.mp4" type="video/mp4">
+        </video>
+        <button class="replay" type="button" id="hero-toggle" hidden>
+          <svg class="icon-16" aria-hidden="true"><use href="#i-pause"/></svg><span>Pause</span>
         </button>
       </figure>
+      <ol class="chapters" id="chapters" hidden aria-label="Features in the video">
+        <li><button type="button" data-start="0" data-end="5"><span class="ch-bar" aria-hidden="true"><span></span></span><span class="ch-name">Capture</span><span class="ch-sub">Region, window or full screen</span></button></li>
+        <li><button type="button" data-start="5" data-end="10.5"><span class="ch-bar" aria-hidden="true"><span></span></span><span class="ch-name">Preview card</span><span class="ch-sub">Edit, copy, OCR, pin or save</span></button></li>
+        <li><button type="button" data-start="10.5" data-end="19"><span class="ch-bar" aria-hidden="true"><span></span></span><span class="ch-name">Annotate</span><span class="ch-sub">Arrows, labels and blur</span></button></li>
+        <li><button type="button" data-start="19" data-end="24.5"><span class="ch-bar" aria-hidden="true"><span></span></span><span class="ch-name">Share</span><span class="ch-sub">Drag it into chat or email</span></button></li>
+        <li><button type="button" data-start="24.5" data-end="33"><span class="ch-bar" aria-hidden="true"><span></span></span><span class="ch-name">Record</span><span class="ch-sub">MP4 or GIF, on Windows</span></button></li>
+        <li><button type="button" data-start="33" data-end="41"><span class="ch-bar" aria-hidden="true"><span></span></span><span class="ch-name">Whiteboard</span><span class="ch-sub">Sketch around captures</span></button></li>
+      </ol>
     </div>
   </div>
 
   <section id="features" aria-labelledby="features-title">
     <div class="wrap">
       <p class="eyebrow">What it does</p>
-      <h2 id="features-title">From the pixel you meant to the point you are making.</h2>
-      <p class="section-lead">One shortcut to capture, one click to mark it up, and a set of small tools for everything around a screenshot.</p>
+      <h2 id="features-title">Capture it, then annotate it.</h2>
+      <p class="section-lead">The capture tools and the editor come first. Below them are the smaller tools: OCR, pinning, history, a color picker and a ruler.</p>
 
       <div class="chapter reveal">
         <div class="chapter-text">
-          <h3>Capture exactly what you mean</h3>
-          <p>Drag a region, click a window, or take the whole screen. For pages longer than your display, scrolling capture scrolls for you and stitches one tall image.</p>
+          <h3>Capture the area you need</h3>
+          <p>Drag a region, click a window, or take the whole screen. Each mode has its own shortcut.</p>
           <ul class="ticks">
-            <li><svg class="icon" aria-hidden="true"><use href="#i-selection"/></svg><span><b>Region, window, full screen.</b> Plus repeat-last-area and delayed capture.</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-arrows-down-up"/></svg><span><b>Scrolling capture.</b> Auto-scroll and stitch long pages into one image.</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg><span><b>Act right away.</b> The preview card offers Edit, Copy, OCR, Pin and Save.</span></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-selection"/></svg><span><b>Repeat and delay.</b> Capture the last area again, or start a timer first.</span></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-arrows-down-up"/></svg><span><b>Scrolling capture.</b> For pages taller than your screen: it scrolls the page and stitches it into one image.</span></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg><span><b>Preview card.</b> After a capture, choose Edit, Copy, OCR, Pin or Save.</span></li>
           </ul>
         </div>
         <figure class="shot"><img src="assets/capture.jpg" width="1200" height="675" loading="lazy" alt="A region being selected over a document, with the size readout 760 by 440 at the corner of the selection."></figure>
@@ -130,17 +126,17 @@
 
       <div class="chapter flip reveal">
         <div class="chapter-text">
-          <h3>Say it right on the pixels</h3>
-          <p>The editor opens the moment you capture. Everything is a vector you can move, restyle or undo, and the canvas grows when you draw past the edge.</p>
+          <h3>Annotate it</h3>
+          <p>Marks stay editable after you draw them, so you can move or restyle any of them later. The canvas grows when you draw past the edge.</p>
           <ul class="tools">
             <li><svg class="icon" aria-hidden="true"><use href="#i-arrow-bend-up-right"/></svg><div><b>Arrows</b><span>Straight, elbow and curved</span></div></li>
             <li><svg class="icon" aria-hidden="true"><use href="#i-chat-circle"/></svg><div><b>Text and bubbles</b><span>Labels and speech bubbles</span></div></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-list-numbers"/></svg><div><b>Counters</b><span>Numbered steps that count themselves</span></div></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-list-numbers"/></svg><div><b>Counters</b><span>Numbered step markers</span></div></li>
             <li><svg class="icon" aria-hidden="true"><use href="#i-highlighter"/></svg><div><b>Highlighter</b><span>Snaps to the text it finds</span></div></li>
             <li><svg class="icon" aria-hidden="true"><use href="#i-eye-slash"/></svg><div><b>Redaction</b><span>Blur, pixelate or hide</span></div></li>
             <li><svg class="icon" aria-hidden="true"><use href="#i-magnifying-glass-plus"/></svg><div><b>Spotlight and loupe</b><span>Dim the rest or magnify a detail</span></div></li>
             <li><svg class="icon" aria-hidden="true"><use href="#i-shapes"/></svg><div><b>Hand-drawn shapes</b><span>Clean or sketch style</span></div></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-crop"/></svg><div><b>Crop</b><span>Trim to the part that matters</span></div></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-crop"/></svg><div><b>Crop</b><span>Trim the image</span></div></li>
           </ul>
         </div>
         <figure class="shot"><img src="assets/annotate.jpg" width="1200" height="675" loading="lazy" alt="The ClipMark editor with a red curved arrow pointing at the tallest bar of a chart and a red label reading Up 32% this week."></figure>
@@ -148,11 +144,10 @@
 
       <div class="chapter reveal">
         <div class="chapter-text">
-          <h3>Show it in motion <span class="tag"><svg class="icon-16" aria-hidden="true"><use href="#i-windows-logo"/></svg>Windows</span></h3>
-          <p>Record a region of the screen when a still image is not enough. Save an MP4 or a GIF, and paste the result straight into chat.</p>
+          <h3>Record the screen <span class="tag"><svg class="icon-16" aria-hidden="true"><use href="#i-windows-logo"/></svg>Windows</span></h3>
+          <p>Record a region of the screen and save it as an MP4 or a GIF.</p>
           <ul class="ticks">
-            <li><svg class="icon" aria-hidden="true"><use href="#i-video-camera"/></svg><span><b>MP4 or GIF.</b> Pick the format that fits where it is going.</span></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span><b>Webcam and audio.</b> Add your camera and a microphone with a live level meter.</span></li>
+                        <li><svg class="icon" aria-hidden="true"><use href="#i-video-camera"/></svg><span><b>Webcam and audio.</b> Add your camera and a microphone with a live level meter.</span></li>
           </ul>
         </div>
         <figure class="shot"><img src="assets/record.jpg" width="1200" height="675" loading="lazy" alt="A region being recorded, with a red circle drawn around a chart bar and a small control bar showing Pause, the elapsed time and End."></figure>
@@ -160,47 +155,34 @@
 
       <div class="chapter flip reveal">
         <div class="chapter-text">
-          <h3>A whiteboard for everything around it</h3>
-          <p>Bring captures onto an infinite canvas and sketch over them. Sticky notes, connectors that hold onto their anchors, page margins for printing, and snapshots to step back in time.</p>
+          <h3>A whiteboard for your captures</h3>
+          <p>Place captures on an infinite canvas and draw around them. It also has sticky notes, page margins for printing, and snapshots you can go back to.</p>
           <ul class="ticks">
             <li><svg class="icon" aria-hidden="true"><use href="#i-flow-arrow"/></svg><span><b>Connectors with anchors.</b> Lines stay attached when you move things.</span></li>
             <li><svg class="icon" aria-hidden="true"><use href="#i-download-simple"/></svg><span><b>Export PNG, JPEG or PDF.</b> With page setup for print.</span></li>
           </ul>
         </div>
-        <figure class="shot"><img src="assets/whiteboard.jpg" width="1200" height="525" loading="lazy" alt="The dark whiteboard with a hand-drawn red circle, an arrow and an underline sketched beside a captured chart."></figure>
+        <figure class="shot"><img src="assets/whiteboard-light.jpg" width="1200" height="675" loading="lazy" alt="The whiteboard on a white dotted canvas: a hand-drawn red circle, an arrow and an underline beside a captured chart, with the drawing toolbar below."></figure>
       </div>
 
       <ul class="kit reveal" aria-label="Everyday tools">
-        <li><svg class="icon" aria-hidden="true"><use href="#i-scan"/></svg><b>Copy text (OCR)</b><span>Select any on-screen text and copy it, even from an image.</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-scan"/></svg><b>Copy text (OCR)</b><span>Select an area and copy the text in it, including text inside images.</span></li>
         <li><svg class="icon" aria-hidden="true"><use href="#i-push-pin"/></svg><b>Pin to screen</b><span>Float a capture above your windows while you work.</span></li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-clock-counter-clockwise"/></svg><b>History</b><span>Every capture, ready to reopen, copy or edit again.</span></li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-eyedropper"/></svg><b>Color picker</b><span>Grab any pixel's color from anywhere on screen.</span></li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-ruler"/></svg><b>Screen ruler</b><span>Measure distances between things on screen.</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-clock-counter-clockwise"/></svg><b>History</b><span>Reopen, copy or edit earlier captures.</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-eyedropper"/></svg><b>Color picker</b><span>Copy the color of any pixel on screen.</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-ruler"/></svg><b>Screen ruler</b><span>Measure distances on screen.</span></li>
         <li><svg class="icon" aria-hidden="true"><use href="#i-circle-half"/></svg><b>Light and dark</b><span>Follows your system theme, or pick one.</span></li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-arrows-clockwise"/></svg><b>Update checks</b><span>The app looks for new versions on this page.</span></li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-selection"/></svg><b>Global shortcuts</b><span>Every capture mode on its own key, fully remappable.</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-arrows-clockwise"/></svg><b>Update checks</b><span>The app checks GitHub releases for new versions.</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-selection"/></svg><b>Global shortcuts</b><span>Each capture mode has its own key, and you can change them.</span></li>
       </ul>
     </div>
   </section>
 
-  <section id="film" aria-labelledby="film-title">
-    <div class="wrap">
-      <h2 id="film-title">Forty-six seconds, start to finish.</h2>
-      <p class="section-lead">Capture, mark up, share, record and sketch, the way it looks on screen.</p>
-      <div class="film reveal">
-        <video controls preload="none" playsinline poster="assets/video-poster.jpg" width="1280" height="720" aria-label="ClipMark product video">
-          <source src="https://raw.githubusercontent.com/pow3rcycle/clipmark-releases/main/media/clipmark-product-video.mp4" type="video/mp4">
-          <a href="https://github.com/pow3rcycle/clipmark-releases/raw/main/media/clipmark-product-video.mp4">Download the product video (MP4)</a>
-        </video>
-      </div>
-    </div>
-  </section>
 
   <section id="platforms" aria-labelledby="platforms-title">
     <div class="wrap">
-      <p class="eyebrow">Mac and Windows</p>
-      <h2 id="platforms-title">Two native apps, one way of working.</h2>
-      <p class="section-lead">The Windows app is built on .NET and WPF. The Mac app is written from scratch in Swift and AppKit, so it looks and behaves like a Mac app. Screen recording is Windows-only for now.</p>
+      <h2 id="platforms-title">A native app for each platform</h2>
+      <p class="section-lead">The Windows app is built on .NET and WPF. The Mac app is written from scratch in Swift and AppKit, so it follows Mac conventions. Screen recording is Windows-only for now.</p>
 
       <div class="platform-grid">
         <div class="platform reveal" data-os="win">
@@ -252,8 +234,8 @@
 
   <section id="releases" aria-labelledby="releases-title">
     <div class="wrap">
-      <h2 id="releases-title">Releases, live from GitHub.</h2>
-      <p class="section-lead">The newest build for each platform, and what changed in every version.</p>
+      <h2 id="releases-title">Releases</h2>
+      <p class="section-lead">The newest build for each platform, and notes for the three most recent releases. Loaded from GitHub when you open this page.</p>
 
       <div class="rel-grid">
         <article class="rel-card reveal" data-os="win" aria-labelledby="rel-win-title">
@@ -284,11 +266,9 @@
       <p class="rel-status" id="rel-status" role="status" aria-live="polite"></p>
 
       <div class="timeline" id="timeline" hidden>
-        <h3>What changed</h3>
+        <h3>Recent releases</h3>
         <ol class="tl" id="tl"></ol>
-        <div class="more-row" id="more-row" hidden>
-          <button class="btn btn-text" type="button" id="more-btn">Show older versions</button>
-        </div>
+        <p class="more-row"><a href="https://github.com/pow3rcycle/clipmark-releases/releases">All releases on GitHub</a></p>
       </div>
     </div>
   </section>

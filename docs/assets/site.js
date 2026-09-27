@@ -1,4 +1,4 @@
-/* ClipMark showcase: OS detection, hero markup demo, scroll reveal, theme switch,
+/* ClipMark showcase: OS detection, hero video chapters, scroll reveal, theme switch,
    and the live releases dashboard. No dependencies, no trackers.
    Untrusted text from the GitHub API is only ever set through textContent. */
 (function () {
@@ -9,7 +9,7 @@
   var RELEASES_PAGE = 'https://github.com/' + REPO + '/releases';
   var CACHE_KEY = 'clipmark-releases-v1';
   var CACHE_MS = 15 * 60 * 1000;
-  var TIMELINE_INITIAL = 5;
+  var TIMELINE_COUNT = 3; // newest releases shown, across both platforms
 
   var root = document.documentElement;
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -69,31 +69,83 @@
     setTheme(THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length]);
   });
 
-  /* ---------- hero markup demo ---------- */
-  var stage = $('#stage');
-  var replay = $('#replay');
-  function play() {
-    if (!stage) return;
-    stage.classList.remove('play');
-    void stage.offsetWidth; // restart the CSS animations
-    stage.classList.add('play');
-  }
-  if (stage) {
-    if (reduceMotion.matches || !('IntersectionObserver' in window)) {
-      stage.classList.add('play');
-    } else {
-      var so = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting && e.intersectionRatio > 0.35) { play(); so.disconnect(); }
+  /* ---------- hero video: feature chapters on one looping video ---------- */
+  (function heroVideo() {
+    var vid = $('#hero-video'), toggle = $('#hero-toggle'), list = $('#chapters');
+    if (!vid || !toggle || !list) return;
+    var segs = $all('button', list).map(function (b) {
+      return { start: parseFloat(b.getAttribute('data-start')), end: parseFloat(b.getAttribute('data-end')), btn: b, bar: b.querySelector('.ch-bar > span') };
+    });
+    var userPaused = reduceMotion.matches; // reduced motion: nothing moves until asked
+    var stopAt = null;                     // reduced motion: a picked chapter plays once, then stops
+    var raf = 0, current = -1;
+
+    vid.removeAttribute('controls');
+    vid.loop = true;
+    toggle.hidden = false;
+    list.hidden = false;
+
+    function indexAt(t) {
+      for (var i = segs.length - 1; i >= 0; i--) if (t >= segs[i].start - 0.01) return i;
+      return 0;
+    }
+    function paint() {
+      var t = vid.currentTime || 0;
+      if (stopAt !== null && t >= stopAt) {
+        vid.pause(); userPaused = true; stopAt = null;
+      }
+      var i = indexAt(t);
+      segs.forEach(function (s, k) {
+        var p = k < i ? 1 : k > i ? 0 : Math.min(1, Math.max(0, (t - s.start) / (s.end - s.start)));
+        s.bar.style.setProperty('--p', p.toFixed(3));
+      });
+      if (i !== current) {
+        current = i;
+        segs.forEach(function (s, k) {
+          if (k === i) s.btn.setAttribute('aria-current', 'true'); else s.btn.removeAttribute('aria-current');
         });
-      }, { threshold: [0, 0.35, 0.6] });
-      so.observe(stage);
-      if (replay) {
-        replay.hidden = false;
-        replay.addEventListener('click', play);
       }
     }
-  }
+    function tick() { paint(); raf = vid.paused ? 0 : requestAnimationFrame(tick); }
+    function syncToggle() {
+      var playing = !vid.paused;
+      toggle.querySelector('use').setAttribute('href', playing ? '#i-pause' : '#i-play');
+      toggle.querySelector('span').textContent = playing ? 'Pause' : 'Play';
+      toggle.setAttribute('aria-label', (playing ? 'Pause' : 'Play') + ' the product video');
+    }
+    function start() {
+      var p = vid.play();
+      if (p && p.catch) p.catch(function () { userPaused = true; syncToggle(); });
+    }
+    vid.addEventListener('play', function () { syncToggle(); if (!raf) raf = requestAnimationFrame(tick); });
+    vid.addEventListener('pause', function () { syncToggle(); paint(); });
+    vid.addEventListener('seeked', paint);
+    vid.addEventListener('loadedmetadata', paint);
+
+    toggle.addEventListener('click', function () {
+      if (vid.paused) { userPaused = false; stopAt = null; start(); }
+      else { userPaused = true; vid.pause(); }
+    });
+    segs.forEach(function (s) {
+      s.btn.addEventListener('click', function () {
+        vid.currentTime = s.start;
+        stopAt = reduceMotion.matches ? s.end : null;
+        userPaused = false;
+        start();
+      });
+    });
+
+    // Play only while the hero is on screen, and never after the visitor paused it.
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        var visible = entries[0].isIntersecting;
+        if (!visible && !vid.paused) vid.pause();
+        else if (visible && vid.paused && !userPaused) start();
+      }, { threshold: 0.25 }).observe(vid);
+    } else if (!userPaused) start();
+    syncToggle();
+    paint();
+  })();
 
   /* ---------- scroll reveal: only content that starts below the fold ---------- */
   var reveals = $all('.reveal');
@@ -263,13 +315,12 @@
   }
 
   function renderTimeline(all) {
-    var box = $('#timeline'), ol = $('#tl'), moreRow = $('#more-row'), moreBtn = $('#more-btn');
+    var box = $('#timeline'), ol = $('#tl');
     if (!box || !ol) return;
     ol.textContent = '';
-    all.forEach(function (x, i) {
+    all.slice(0, TIMELINE_COUNT).forEach(function (x, i) {
       var r = x.r;
       var li = el('li');
-      if (i >= TIMELINE_INITIAL) li.hidden = true;
       var meta = el('div', 'tl-meta');
       var chip = el('span', 'os-chip');
       chip.appendChild(icon(x.platform === 'mac' ? 'i-apple-logo' : 'i-windows-logo'));
@@ -308,18 +359,6 @@
       ol.appendChild(li);
     });
     box.hidden = false;
-    var hiddenCount = Math.max(0, all.length - TIMELINE_INITIAL);
-    if (hiddenCount && moreRow && moreBtn) {
-      moreRow.hidden = false;
-      moreBtn.textContent = 'Show ' + hiddenCount + ' older version' + (hiddenCount === 1 ? '' : 's');
-      moreBtn.onclick = function () {
-        $all('#tl > li[hidden]').forEach(function (n) { n.hidden = false; });
-        moreRow.hidden = true;
-        var next = ol.children[TIMELINE_INITIAL];
-        var focusTarget = next && next.querySelector('summary, a');
-        if (focusTarget) focusTarget.focus();
-      };
-    }
   }
 
   function showFallback(reason) {
