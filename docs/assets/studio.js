@@ -7,6 +7,8 @@
   'use strict';
 
   var NS = 'http://www.w3.org/2000/svg';
+  /* Keycaps say Cmd for Mac visitors, Ctrl for everyone else. */
+  var MOD = /Mac/i.test((navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '') ? 'Cmd' : 'Ctrl';
   var ICONS = 'assets/icons.svg#i-';
   var reduceMq = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
 
@@ -188,20 +190,29 @@
   /* Recording pill, as in the app: dot + timer | mic | system audio | webcam. */
   function recPill(p, x, y) {
     var g = E('g', { transform: 'translate(' + x + ' ' + y + ')' }, p);
-    E('rect', { x: 0, y: 0, width: 220, height: 44, rx: 22, 'class': 's-recbar' }, g);
+    var body = E('rect', { x: 0, y: 0, width: 220, height: 44, rx: 22, 'class': 's-recbar' }, g);
     var dot = E('circle', { cx: 24, cy: 22, r: 6, 'class': 's-accent' }, g);
     var time = text(g, 38, 27.5, '0:00', 14, 's-rec-text', 600);
     E('path', { d: 'M90 12V32', 'class': 's-rec-div' }, g);
     var mic = icon(g, 'Mute', 104, 13, 18, 's-rec-off-g');
     var sys = icon(g, 'SystemAudio', 140, 13, 18, 's-rec-off-g');
     var cam = icon(g, 'Webcam', 176, 13, 18, 's-rec-off-g');
-    return { g: g, dot: dot, time: time, mic: mic, sys: sys, cam: cam };
+    var cx = x + 110;
+    return {
+      g: g, dot: dot, time: time, mic: mic, sys: sys, cam: cam,
+      /* Widen the pill by `extra` after the mic (room for its level meter), keeping it centred. */
+      grow: function (extra) {
+        S(body, { width: f1(220 + extra) });
+        tr(sys, 140 + extra, 13); tr(cam, 176 + extra, 13);
+        tr(g, cx - (220 + extra) / 2, y);
+      }
+    };
   }
   function setIcon(g, name) { var u = g.firstChild; var h = ICONS + name; if (u.getAttribute('href') !== h) u.setAttribute('href', h); }
   function plate(p, x, y, n) {
     var g = E('g', { transform: 'translate(' + x + ' ' + y + ')' }, p);
-    E('circle', { r: 14, 'class': 's-accent-solid' }, g);
-    text(g, 0, 5, String(n), 14, 's-on-accent-text', 700, 'middle');
+    E('circle', { r: 14, 'class': 's-counter' }, g);
+    text(g, 0, 5, String(n), 14, 's-counter-text', 700, 'middle');
     return g;
   }
   function flash(p, c) { return E('rect', { x: 0, y: 0, width: c.w, height: c.h, 'class': 's-flash' }, p); }
@@ -335,12 +346,12 @@
     var plate1 = plate(marks, p1xy[0], p1xy[1], 1), plate2 = plate(marks, p2xy[0], p2xy[1], 2);
     var bub = E('g', null, marks), bubXY = [aS[0] - 150, aS[1] - 92];
     var bubBox = E('path', { d: 'M0 0h200a12 12 0 0 1 12 12v30a12 12 0 0 1-12 12H40l-16 16v-16H12A12 12 0 0 1 0 42V12A12 12 0 0 1 12 0z', 'class': 's-bubble' }, bub);
-    var bubText = text(bub, 16, 33, '', 16, 's-text', 600);
+    var bubText = text(bub, 16, 33, '', 16, 's-bubble-text', 600);
     var BUB = 'Button does nothing';
     var ec = cursor(edG);
 
     /* Copy: keycaps + toast */
-    var copyKeys = keycaps(L, W / 2 - 53, H - 92, ['Ctrl', 'C']);
+    var copyKeys = keycaps(L, W / 2 - 53, H - 92, [MOD, 'C']);
     var copied = toast(L, c, W / 2, H - 132, 'Copied to clipboard', 'ClipboardCheck');
 
     /* Chat */
@@ -367,7 +378,7 @@
     E('use', { href: '#' + annId, transform: 'translate(' + f1((320 - (bx1 - bx0) * ss) / 2) + ' ' + f1((252 - (by1 - by0) * ss) / 2) + ') scale(' + ss.toFixed(4) + ') translate(' + f1(-bx0) + ' ' + f1(-by0) + ')' }, sentClip);
     text(sent, 12, 284, 'Found it. The button does nothing.', 13.5, 's-text');
     E('rect', { x: 20, y: 440, width: 340, height: 40, rx: 12, 'class': 's-sunken' }, cb);
-    var pasteKeys = keycaps(L, W / 2 - 53, H - 92, ['Ctrl', 'V']);
+    var pasteKeys = keycaps(L, W / 2 - 53, H - 92, [MOD, 'V']);
 
     var cur = cursor(L), cross = crosshair(L);
 
@@ -727,7 +738,6 @@
       var pg = page(img, s.w, s.h, { title: 'Pricing', tiles: ['Free', 'Team', 'Business'] });
       var cx = 20 + pg.tw * 1.5 + 12, cy = pg.ty + pg.th / 2;
       var dim = E('path', { 'class': 's-dim', 'fill-rule': 'evenodd' }, s.g);
-      var ring = E('ellipse', { cx: cx, cy: cy, rx: pg.tw / 2 + 18, ry: pg.th / 2 + 18, 'class': 's-spot-ring' }, s.g);
       var lcl = clip(c, 0, 0, 0, 0, 0); lcl.el.removeChild(lcl.rect);
       var lc = E('circle', { r: 50 }, lcl.el);
       var lz = E('g', { 'clip-path': lcl.url }, s.g);
@@ -738,7 +748,7 @@
         dur: 6000, settle: 2200, render: function (t) {
           b.ed.tool(t < 500 ? 0 : SP);
           var d = t < 3000 ? seg(t, 800, 1200) : 1 - seg(t, 3000, 3300);
-          op(dim, d); op(ring, d);
+          op(dim, d);
           var rx = pg.tw / 2 + 18, ry = pg.th / 2 + 18;
           S(dim, { d: 'M0 0H' + s.w + 'V' + s.h + 'H0Z M' + f1(cx - rx) + ' ' + cy + 'a' + rx + ' ' + ry + ' 0 1 0 ' + f1(rx * 2) + ' 0a' + rx + ' ' + ry + ' 0 1 0 ' + f1(-rx * 2) + ' 0Z' });
           var lp = seg(t, 3300, 3600) * (1 - seg(t, 5600, 5900));
@@ -756,8 +766,8 @@
       var b = annotBase(L, c), s = b.sh, pg = page(s.g, s.w, s.h, { title: 'Weekly report', tiles: ['Mon', 'Wed', 'Fri'] }), TX = 3;
       var bub = E('g', null, s.g), bx = 40 + pg.tw * 1.5, by = pg.ty - 46;
       E('path', { d: 'M0 0h168a12 12 0 0 1 12 12v24a12 12 0 0 1-12 12H44l-14 14v-14H12A12 12 0 0 1 0 36V12A12 12 0 0 1 12 0z', 'class': 's-bubble' }, bub);
-      var bt = text(bub, 16, 30, '', 16, 's-text', 600);
-      var lab = text(s.g, 30, s.h - 26, '', 18, 's-accent-text', 700);
+      var bt = text(bub, 16, 30, '', 16, 's-bubble-text', 600);
+      var lab = text(s.g, 30, s.h - 26, '', 18, 's-mark-text', 700);
       var S1 = 'Start here', S2 = 'Saved automatically';
       return {
         dur: 5000, settle: 3800, render: function (t) {
@@ -859,9 +869,10 @@
     },
     audio: function (L, c) {
       var b = recBase(L, c);
-      var meter = E('g', { transform: 'translate(406 368)' }, L);
-      E('rect', { x: -8, y: -6, width: 70, height: 32, rx: 10, 'class': 's-recbar' }, meter);
-      var bars = [0, 1, 2, 3, 4, 5].map(function (i) { return E('rect', { x: i * 9, width: 5, rx: 2.5, 'class': 's-meter' }, meter); });
+      /* The level meter sits inside the pill, right after the mic it belongs to. */
+      var meter = E('g', { transform: 'translate(130 12)' }, b.pill.g);
+      var bars = [0, 1, 2, 3, 4, 5].map(function (i) { return E('rect', { x: i * 8, width: 4, rx: 2, 'class': 's-meter' }, meter); });
+      var ROOM = 54;
       return {
         dur: 5200, settle: 2000, render: function (t) {
           clock(b.pill, t, 0);
@@ -869,7 +880,9 @@
           setIcon(b.pill.mic, on ? 'Mic' : 'Mute');
           b.pill.mic.setAttribute('class', on ? 's-rec-on-g' : 's-rec-off-g');
           b.pill.sys.setAttribute('class', t > 900 ? 's-rec-on-g' : 's-rec-off-g');
-          op(meter, seg(t, 500, 700));
+          var g = eo(seg(t, 450, 750));
+          b.pill.grow(ROOM * g);
+          op(meter, seg(t, 650, 800));
           bars.forEach(function (r, i) {
             var lv = Math.abs(Math.sin(t / 170 + i * 1.3) * Math.sin(t / 430 + i * 0.7));
             var h = 4 + 16 * lv * (on ? 1 : 0);
@@ -930,7 +943,7 @@
     place: function (L, c) {
       var bd = board(L, c);
       var cards = [[150, 120, 280, 200, -6, 'Login'], [480, 150, 260, 190, 4, 'Checkout'], [800, 110, 280, 210, -3, 'Receipt']].map(function (d) { var g = card(L, c, d[2], d[3], d[5]); g._d = d; return g; });
-      var ul = E('path', { d: roughEllipse(610, 248, 170, 125, 3, 0.07), 'class': 's-mark s-sketch' }, L);
+      var ul = E('path', { d: roughEllipse(610, 248, 170, 125, 3, 0.07), 'class': 's-wb-ink s-sketch' }, L);
       return {
         dur: 5600, settle: 3800, render: function (t) {
           bd.tool(t < 2400 ? 5 : 3);
@@ -970,9 +983,9 @@
       E('rect', { x: 18, y: 26, width: 120, height: 7, rx: 3.5, 'class': 's-note-ink' }, note);
       E('rect', { x: 18, y: 44, width: 96, height: 7, rx: 3.5, 'class': 's-note-ink' }, note);
       E('rect', { x: 18, y: 62, width: 110, height: 7, rx: 3.5, 'class': 's-note-ink' }, note);
-      var circ = E('path', { d: roughEllipse(710, 265, 180, 140, 9, 0.06), 'class': 's-mark s-sketch' }, L);
-      var arr = E('path', { d: 'M330 300 C 400 330, 450 320, 515 285', 'class': 's-mark s-sketch' }, L);
-      var head = E('path', { d: 'M-14 -8L0 0L-14 8', 'class': 's-mark s-sketch' }, L);
+      var circ = E('path', { d: roughEllipse(710, 265, 180, 140, 9, 0.06), 'class': 's-wb-ink s-sketch' }, L);
+      var arr = E('path', { d: 'M330 300 C 400 330, 450 320, 515 285', 'class': 's-wb-ink s-sketch' }, L);
+      var head = E('path', { d: 'M-14 -8L0 0L-14 8', 'class': 's-wb-ink s-sketch' }, L);
       return {
         dur: 5600, settle: 4200, render: function (t) {
           bd.tool(t < 1500 ? 4 : 3);
@@ -1379,6 +1392,7 @@
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
     }).then(function (list) {
+      if (!Array.isArray(list)) throw new Error('unexpected release list');
       try { localStorage.setItem(CACHE, JSON.stringify({ at: Date.now(), list: list })); } catch (e) {}
       fill(classify(list));
     }).catch(function () {

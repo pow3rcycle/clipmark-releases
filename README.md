@@ -33,7 +33,7 @@ https://github.com/user-attachments/assets/626f37af-51b1-40fe-aa40-c45df039bd13
 | <img src="docs/assets/record.jpg" width="420" alt="Recording a region of the screen"> | **Show it in motion** *(Windows only for now).* Record a region to MP4 or GIF, with webcam and audio, and paste the recording straight into chat. |
 | <img src="docs/assets/whiteboard.jpg" width="420" alt="Sketching on the whiteboard beside a capture"> | **A whiteboard for everything around it.** An infinite canvas with sticky notes, connectors that stay attached to their anchors, page margins, snapshots, and export to PNG, JPEG or PDF. |
 
-**Everyday tools:** copy text from anything on screen (OCR), pin a capture above your windows, capture history, a screen color picker and ruler, light and dark themes, and global shortcuts for every capture mode (`Alt+Shift+1` for an area on Windows, `Option+Shift+1` on the Mac).
+**Everyday tools:** copy text from anything on screen (OCR), pin a capture above your windows, capture history, a screen color picker and ruler, light and dark themes, and global shortcuts for every capture mode (`Alt+Shift+S` for an area on Windows, `Option+Shift+1` on the Mac).
 
 ## Installing
 

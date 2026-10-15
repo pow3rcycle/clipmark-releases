@@ -1,7 +1,7 @@
 /* ClipMark site, 2.8 "Settings Studio" look.
-   Every colour is a token from the app (src/ClipMark.Core/Design/PebbleColors.cs and
-   StudioSceneColors.cs, ThemeManager accent mapping); radii, dock and plate geometry
-   follow SettingsWindow.xaml. Change a value there first, then here. */
+   Every colour is a design token copied from the app (Studio chrome, scene colours and the
+   accent mapping); radii, dock and plate geometry follow the app's Settings window.
+   Change a value in the app first, then here. */
 
 @font-face {
   font-family: "Outfit";
@@ -184,7 +184,7 @@ body {
 img, svg { display: block; }
 a { color: var(--accent-text); text-decoration-thickness: 1px; text-underline-offset: 3px; }
 button { font: inherit; color: inherit; }
-:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .skip { position: absolute; left: 16px; top: -48px; z-index: 50; padding: 8px 14px; border-radius: var(--r-ctl);
   background: var(--surface); color: var(--ink); box-shadow: var(--dock-shadow); text-decoration: none; }
@@ -434,8 +434,17 @@ button { font: inherit; color: inherit; }
 .s-text { font-family: var(--font); fill: var(--ink); }
 .s-text2 { font-family: var(--font); fill: var(--ink2); }
 .s-text3 { font-family: var(--font); fill: var(--ink3); }
-.s-mark { stroke: var(--accent); fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
-.s-hl { fill: var(--accent); opacity: .28; }
+/* Annotation defaults copied from the app's editor: stroke
+   #E53935, snapped by the editor to its #e03131 swatch; bubble = solid fill + white text; counter
+   = fill + 2 px white ring + white digits; highlighter #FFEB3B. Whiteboard ink = #1e1e1e,
+   remapped to light ink in dark mode like the app. Content colours: identical in both themes. */
+.s-mark { stroke: #E03131; fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.s-wb-ink { stroke: var(--ink); fill: none; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+.s-mark-text { font-family: var(--font); fill: #E03131; }
+.s-hl { fill: #FFEB3B; opacity: .55; }
+.s-counter { fill: #E03131; stroke: #fff; stroke-width: 2; }
+.s-counter-text { font-family: var(--font); fill: #fff; }
+.s-bubble-text { font-family: var(--font); fill: #fff; }
 .s-dim { fill: #000; opacity: .32; }
 .s-marquee { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 5 4; }
 .s-icon { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -494,7 +503,7 @@ button { font: inherit; color: inherit; }
 .s-ink3-icon { color: var(--ink3); }
 .s-act-bg { fill: var(--surface2); }
 .s-act-bg.on { fill: var(--dock-selected); }
-.s-bubble { fill: var(--surface); stroke: var(--accent); stroke-width: 2; }
+.s-bubble { fill: #E03131; }
 .s-on-accent-text { font-family: var(--font); fill: var(--on-accent); }
 .s-accent-text { font-family: var(--font); fill: var(--accent-text); }
 .s-numeral-text { font-family: var(--font); fill: var(--numeral-ink); }
@@ -503,7 +512,7 @@ button { font: inherit; color: inherit; }
 .s-rec-on-g { color: var(--rec-on); }
 .s-rec-off-g { color: var(--rec-off); }
 .s-rec-frame { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 8 6; }
-.s-ripple { fill: none; stroke: var(--accent); stroke-width: 3; }
+.s-ripple { fill: none; stroke: #E53935; stroke-width: 3; }
 .s-meter { fill: var(--accent); }
 .s-cam-ring { fill: none; stroke: var(--surface); stroke-width: 4; }
 .s-fold { fill: none; stroke: var(--canvas); stroke-width: 2; opacity: .7; }
@@ -526,7 +535,6 @@ button { font: inherit; color: inherit; }
 .s-knob { fill: var(--knob); stroke: var(--ring); }
 .s-px-a { fill: var(--ink3); opacity: .55; }
 .s-px-b { fill: var(--ink3); opacity: .3; }
-.s-spot-ring { fill: none; stroke: var(--accent); stroke-width: 2; }
 .s-loupe-ring { fill: none; stroke: var(--surface); stroke-width: 4; }
 
 /* Scenes fill their stage; when the rows card makes a stage taller, the scene stays centred. */
