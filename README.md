@@ -14,7 +14,7 @@ Capture any part of your screen, mark it up in seconds, and paste it wherever th
 | Platform | Get it | Requirements |
 |---|---|---|
 | **Windows** | [Latest Windows installer](https://github.com/pow3rcycle/clipmark-releases/releases/latest) (`ClipMark-Setup-<version>.exe`) | Windows 10 (version 2004 or later) or Windows 11, 64-bit |
-| **macOS** | [ClipMark for Mac 1.0.2](https://github.com/pow3rcycle/clipmark-releases/releases/tag/mac-v1.0.2) (`ClipMark-1.0.2.dmg`) | macOS 14 Sonoma or later, Apple silicon or Intel |
+| **macOS** | [ClipMark for Mac 1.1.0](https://github.com/pow3rcycle/clipmark-releases/releases/tag/mac-v1.1.0) (`ClipMark-1.1.0.dmg`) | macOS 14 Sonoma or later, Apple silicon or Intel |
 
 This repository holds installers and the update feed only. The source code is private.
 
@@ -44,7 +44,7 @@ https://github.com/user-attachments/assets/626f37af-51b1-40fe-aa40-c45df039bd13
 
 ### macOS
 
-1. Download `ClipMark-1.0.2.dmg` from the [Mac release](https://github.com/pow3rcycle/clipmark-releases/releases/tag/mac-v1.0.2). The app is signed and notarized by Apple.
+1. Download `ClipMark-1.1.0.dmg` from the [Mac release](https://github.com/pow3rcycle/clipmark-releases/releases/tag/mac-v1.1.0). The app is signed and notarized by Apple.
 2. Open the DMG and drag **ClipMark** into **Applications**.
 3. On the first capture, allow **Screen Recording** in System Settings > Privacy & Security.
 4. Scrolling capture's auto-scroll also asks for **Accessibility**. Manual scrolling works without it.
