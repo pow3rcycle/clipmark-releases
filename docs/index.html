@@ -57,18 +57,17 @@
     <div class="wrap">
       <div class="hero-row">
         <div>
-          <h1>Screenshots that explain themselves.</h1>
-          <p class="hero-lead">Press a shortcut, drag over what you mean, mark it up and paste it into the conversation. For Windows and Mac.</p>
+          <h1 class="hero-title"><span>Clip.</span> <span>mark.</span> <span>send!</span></h1>
         </div>
         <div>
           <div class="hero-cta" id="hero-cta">
             <a class="btn btn-primary" id="dl-win" href="https://github.com/pow3rcycle/clipmark-releases/releases/latest">
               <svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-Download"/></svg>
-              Download for Windows
+              <span>Download for Windows</span>
             </a>
             <a class="btn btn-quiet" id="dl-mac" href="https://github.com/pow3rcycle/clipmark-releases/releases">
               <svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-Download"/></svg>
-              Download for Mac
+              <span>Download for Mac</span>
             </a>
           </div>
           <p class="hero-meta"><span data-field="win-sub">Windows 10 and 11</span>, <span data-field="mac-sub">macOS 14 or later</span></p>
@@ -81,10 +80,10 @@
         </button>
       </figure>
       <ol class="flow" id="flow" aria-label="How it works">
-        <li data-at="0"><span class="n">1</span><span><b>Capture</b> a region</span></li>
-        <li data-at="1"><span class="n">2</span><span><b>Mark up</b> what matters</span></li>
-        <li data-at="2"><span class="n">3</span><span><b>Copy</b> with one key</span></li>
-        <li data-at="3"><span class="n">4</span><span><b>Paste</b> into chat or email</span></li>
+        <li data-at="0"><button type="button"><span class="n">1</span><span><b>Capture</b> a region</span></button></li>
+        <li data-at="1"><button type="button"><span class="n">2</span><span><b>Mark up</b> what matters</span></button></li>
+        <li data-at="2"><button type="button"><span class="n">3</span><span><b>Copy</b> with one key</span></button></li>
+        <li data-at="3"><button type="button"><span class="n">4</span><span><b>Paste</b> into chat or email</span></button></li>
       </ol>
     </div>
   </section>
@@ -185,9 +184,8 @@
     <div class="wrap">
       <div class="sec-head">
         <h2 id="compress-h">Compress</h2>
-        <p>Shrink images and videos before you send them.</p>
-        <span class="badge new">New in 2.8</span>
-        <span class="badge">Windows</span>
+        <p>Shrink or convert images and videos before you send them.</p>
+        <span class="badge new">Now on Mac</span>
       </div>
       <div class="studio flip">
         <figure class="stage" data-stage="compress" aria-label="Animation of the selected way to compress files">
@@ -195,8 +193,8 @@
         </figure>
         <div class="rows" data-for="compress">
           <span class="plate" aria-hidden="true"></span>
-          <button class="row" type="button" data-topic="explorer"><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-Compress"/></svg></span><span class="lbl">From Explorer</span><span class="sub">Right-click files and choose Compress with ClipMark.</span></button>
-          <button class="row" type="button" data-topic="drop"><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-DropImport"/></svg></span><span class="lbl">Drag and drop</span><span class="sub">Drop images and videos on the Compress window, or open it from the tray.</span></button>
+          <button class="row" type="button" data-topic="explorer"><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-Compress"/></svg></span><span class="lbl">From Explorer or Finder</span><span class="sub">Right-click files and choose Compress with ClipMark.</span></button>
+          <button class="row" type="button" data-topic="drop"><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-DropImport"/></svg></span><span class="lbl">Drag and drop</span><span class="sub">Drop images and videos on the Compress window, or open it from the tray or menu bar.</span></button>
           <button class="row" type="button" data-topic="quality"><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-PrefsAdvanced"/></svg></span><span class="lbl">Quality you can see</span><span class="sub">Move the slider and the size estimate follows.</span></button>
         </div>
       </div>
@@ -213,11 +211,15 @@
       <ul class="tools">
         <li class="tool"><h3><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-Ocr"/></svg></span>Copy text</h3><p>Select an area and copy the text in it, including text inside images.</p></li>
         <li class="tool"><h3><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-Pin"/></svg></span>Pin to screen</h3><p>Float a capture above your windows while you work.</p></li>
+        <li class="tool"><h3><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-Print"/></svg></span>Print</h3><p>A page preview, paper and margins, then print straight from the editor. On Windows.</p></li>
+        <li class="tool"><h3><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-CropStraighten"/></svg></span>Crop and straighten</h3><p>Level a crooked screenshot with a dial that snaps to straight. On Windows.</p></li>
+        <li class="tool"><h3><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-RotateLeft"/></svg></span>Rotate and mirror</h3><p>Turn the picture or one mark; text never flips backwards. On Windows.</p></li>
+        <li class="tool"><h3><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-Backdrop"/></svg></span>Backdrop</h3><p>Set a capture on a gradient with padding, rounded corners and a soft shadow.</p></li>
         <li class="tool"><h3><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-PrefsTextHistory"/></svg></span>History</h3><p>Reopen, copy or edit earlier captures.</p></li>
         <li class="tool"><h3><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-PickColor"/></svg></span>Color picker</h3><p>Copy the color of any pixel on screen.</p></li>
         <li class="tool"><h3><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-Ruler"/></svg></span>Screen ruler</h3><p>Measure distances on screen.</p></li>
-        <li class="tool"><h3><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-PrefsShortcuts"/></svg></span>Global shortcuts</h3><p>Every capture mode has a key you can change. An area is <span class="kbd">Alt</span> <span class="kbd">Shift</span> <span class="kbd">S</span> on Windows and <span class="kbd">Option</span> <span class="kbd">Shift</span> <span class="kbd">1</span> on the Mac.</p></li>
-        <li class="tool"><h3><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-PrefsGeneral"/></svg></span>Settings that show you</h3><p>Each setting plays a short preview, and <span class="kbd">Ctrl</span> <span class="kbd">K</span> finds any setting. On Windows.</p></li>
+        <li class="tool"><h3><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-PrefsShortcuts"/></svg></span>Global shortcuts</h3><p>Every capture mode has a key you can change. An area is <span class="kbd">Alt</span> <span class="kbd">Shift</span> <span class="kbd">S</span> on Windows and <span class="kbd">Option</span> <span class="kbd">Shift</span> <span class="kbd">S</span> on the Mac.</p></li>
+        <li class="tool"><h3><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-PrefsGeneral"/></svg></span>Settings that show you</h3><p>Each setting plays a short preview, and <span class="kbd">Ctrl</span> <span class="kbd">K</span> finds any setting (<span class="kbd">Cmd</span> <span class="kbd">K</span> on the Mac).</p></li>
         <li class="tool"><h3><span class="tile"><svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-Moon"/></svg></span>Light and dark</h3><p>Follows your system theme, or pick one.</p></li>
       </ul>
     </div>
@@ -240,11 +242,12 @@
             <dt>System</dt><dd>Windows 10 (version 2004 or later) or Windows 11, 64-bit</dd>
             <dt>Built with</dt><dd>.NET and WPF</dd>
           </dl>
-          <a class="btn btn-quiet" data-field="link" href="https://github.com/pow3rcycle/clipmark-releases/releases/latest">
+          <p class="note">The installer is not code-signed yet, so SmartScreen may warn on first run. Choose More info, then Run anyway.</p>
+          <a class="btn btn-primary btn-wide" data-field="link" href="https://github.com/pow3rcycle/clipmark-releases/releases/latest">
             <svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-Download"/></svg>
             <span data-field="link-label">Get the Windows installer</span>
+            <small data-field="link-size"></small>
           </a>
-          <p class="note">The installer is not code-signed yet, so SmartScreen may warn on first run. Choose More info, then Run anyway.</p>
         </article>
         <article class="card" data-os="mac">
           <h3>macOS <span class="you" hidden>Your system</span></h3>
@@ -255,11 +258,12 @@
             <dt>System</dt><dd>macOS 14 Sonoma or later, Apple silicon or Intel</dd>
             <dt>Built with</dt><dd>Swift and AppKit, signed and notarized</dd>
           </dl>
-          <a class="btn btn-quiet" data-field="link" href="https://github.com/pow3rcycle/clipmark-releases/releases">
+          <p class="note">On first capture, allow Screen Recording in System Settings. Auto-scroll in scrolling capture also asks for Accessibility.</p>
+          <a class="btn btn-primary btn-wide" data-field="link" href="https://github.com/pow3rcycle/clipmark-releases/releases">
             <svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-Download"/></svg>
             <span data-field="link-label">Get the Mac app</span>
+            <small data-field="link-size"></small>
           </a>
-          <p class="note">On first capture, allow Screen Recording in System Settings. Auto-scroll in scrolling capture also asks for Accessibility.</p>
         </article>
       </div>
 
@@ -273,15 +277,21 @@
           <tr><th scope="row">Copy text (OCR), pin, history, color picker, ruler</th><td data-yes></td><td data-yes></td></tr>
           <tr><th scope="row">Whiteboard with PNG, JPEG and PDF export</th><td data-yes></td><td data-yes></td></tr>
           <tr><th scope="row">Screen recording (MP4, GIF)</th><td data-yes></td><td data-no></td></tr>
-          <tr><th scope="row">Compress images and videos</th><td data-yes></td><td data-no></td></tr>
+          <tr><th scope="row">Compress images and videos</th><td data-yes></td><td data-yes></td></tr>
+          <tr><th scope="row">Backdrop for screenshots</th><td data-yes></td><td data-yes></td></tr>
+          <tr><th scope="row">Print, crop and straighten</th><td data-yes></td><td data-no></td></tr>
         </tbody>
       </table>
 
-      <div class="sec-head sub-head">
-        <h2>Recent releases</h2>
-        <p><a href="https://github.com/pow3rcycle/clipmark-releases/releases">All releases on GitHub</a></p>
+      <div class="sec-head sub-head rel-head">
+        <h2 id="rel-h">Recent releases</h2>
+        <div class="seg" role="group" aria-label="Show releases for">
+          <button type="button" data-rel-os="win" aria-pressed="true">Windows</button>
+          <button type="button" data-rel-os="mac" aria-pressed="false">macOS</button>
+        </div>
+        <p class="rel-all"><a href="https://github.com/pow3rcycle/clipmark-releases/releases">All releases on GitHub</a></p>
       </div>
-      <ol class="timeline" id="timeline"></ol>
+      <ol class="timeline" id="timeline" aria-labelledby="rel-h"></ol>
     </div>
   </section>
 
@@ -309,6 +319,12 @@
       </div>
     </div>
   </section>
+  <!-- Floating download button: appears once the hero button scrolls away, follows the page,
+       and lands on the Download card button (studio.js, initFloatCta). -->
+  <a class="btn btn-primary float-cta" id="float-cta" href="https://github.com/pow3rcycle/clipmark-releases/releases/latest" aria-label="Download ClipMark for Windows" data-ferro-icon hidden>
+    <svg class="ico" aria-hidden="true"><use href="assets/icons.svg#i-Download"/></svg>
+    <span class="float-label" aria-hidden="true">Download for Windows</span>
+  </a>
 </main>
 
 <footer class="foot">
@@ -322,5 +338,6 @@
 </footer>
 
 <script src="assets/studio.js" defer></script>
+<script src="assets/ferro.js" defer></script>
 </body>
 </html>

@@ -479,8 +479,9 @@
       op(cur.g, !useCross && t < 3500 ? 1 : 0); putCur(cur, dk, pressedAt(t, [3250]));
     }
     return {
-      dur: 13600, settle: 7900, render: render,
-      phase: function (t) { return t < 3450 ? 0 : t < 7850 ? 1 : t < 8700 ? 2 : 3; }
+      dur: 13600, settle: 7900, render: render, speed: 0.6,
+      phase: function (t) { return t < 3450 ? 0 : t < 7850 ? 1 : t < 8700 ? 2 : 3; },
+      phaseStart: [0, 3450, 7850, 8700]
     };
   }
 
@@ -1158,7 +1159,14 @@
     function drawAt(t) {
       var sc = scenes[st.topic];
       sc.render(t);
-      if (flow.length) { var ph = sc.phase(t); flow.forEach(function (li, i) { li.classList.toggle('on', i === ph); }); }
+      if (flow.length) {
+        var ph = sc.phase(t);
+        flow.forEach(function (li, i) {
+          if (li.classList.contains('on') === (i === ph)) return;
+          li.classList.toggle('on', i === ph);
+          var b = li.querySelector('button'); if (b) { if (i === ph) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); }
+        });
+      }
     }
     function settled() { drawAt(scenes[st.topic].settle); }
     function select(tp, user) {
@@ -1171,7 +1179,7 @@
     function frame(now) {
       st.raf = 0;
       if (st.paused || !st.visible || reduceMq.matches) return;
-      var sc = scenes[st.topic], t = now - st.t0;
+      var sc = scenes[st.topic], t = (now - st.t0) * (sc.speed || 1);
       if (st.auto && order.length > 1 && t >= sc.dur) {
         var i = order.indexOf(st.topic);
         select(order[(i + 1) % order.length], false);
@@ -1180,7 +1188,8 @@
       drawAt(t % sc.dur);
       st.raf = requestAnimationFrame(frame);
     }
-    function run() { if (!st.raf && st.visible && !st.paused && !reduceMq.matches) { st.t0 = performance.now() - (st.frozen || 0); st.frozen = 0; st.raf = requestAnimationFrame(frame); } }
+    function speed() { return scenes[st.topic].speed || 1; }
+    function run() { if (!st.raf && st.visible && !st.paused && !reduceMq.matches) { st.t0 = performance.now() - (st.frozen || 0) / speed(); st.frozen = 0; st.raf = requestAnimationFrame(frame); } }
     function stop() { if (st.raf) { cancelAnimationFrame(st.raf); st.raf = 0; } }
 
     /* rows: plate follows the pointer at once; the scene follows after a 200 ms dwell */
@@ -1206,9 +1215,20 @@
     }
     if (ctl) ctl.addEventListener('click', function () {
       st.paused = !st.paused;
-      if (st.paused) { st.frozen = (performance.now() - st.t0) % scenes[st.topic].dur; stop(); }
+      if (st.paused) { st.frozen = ((performance.now() - st.t0) * speed()) % scenes[st.topic].dur; stop(); }
       else run();
       setCtl();
+    });
+
+    /* Hero step chips jump the film to the start of their step (paused stays paused). */
+    flow.forEach(function (li, i) {
+      var b = li.querySelector('button'), sc = scenes[st.topic];
+      if (!b || !sc.phaseStart) return;
+      b.addEventListener('click', function () {
+        var at = sc.phaseStart[i] + 1;
+        if (reduceMq.matches || st.paused) { st.frozen = at; drawAt(at); return; }
+        st.t0 = performance.now() - at / speed(); drawAt(at); run();
+      });
     });
 
     if ('IntersectionObserver' in window) {
@@ -1312,17 +1332,57 @@
     return { all: all, win: latest('win'), mac: latest('mac') };
   }
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
-  /* Release notes: a small safe subset of Markdown (headings, bullets, paragraphs, bold), text only. */
-  function notes(md, box) {
-    var list = null;
+  /* Release notes: a small safe subset of Markdown (headings, bullets one level nested, paragraphs,
+     bold), text only. Also pulls out a summary: the bold lead-in of each feature ("**Print.** ...")
+     and how many fixes are listed. */
+  function parseNotes(md) {
+    var out = { blocks: [], hl: [], fixHl: [], fixes: 0, intro: '' }, sec = '';
     String(md || '').replace(/\r/g, '').split('\n').forEach(function (line) {
       var l = line.trim();
-      if (!l || /^!\[/.test(l) || /^<.*>$/.test(l)) { list = null; return; }
-      var h = /^#{1,6}\s+(.*)$/.exec(l), li = /^[-*]\s+(.*)$/.exec(l);
-      if (h) { box.appendChild(inline(el('h4'), h[1])); list = null; }
-      else if (li) { if (!list) { list = el('ul'); box.appendChild(list); } list.appendChild(inline(el('li'), li[1])); }
-      else { box.appendChild(inline(el('p'), l)); list = null; }
+      if (!l || /^!\[/.test(l) || /^<.*>$/.test(l)) { out.blocks.push({ t: 'gap' }); return; }
+      var h = /^#{1,6}\s+(.*)$/.exec(l) || /^\*\*([^*]+?)\.?\*\*$/.exec(l), li = /^[-*]\s+(.*)$/.exec(l);
+      if (h) {
+        var ht = h[1].replace(/[.:]\s*$/, '');
+        if (!out.blocks.length && /^what.?s new/i.test(ht)) return; /* the card already says which version */
+        sec = ht; out.blocks.push({ t: 'h', s: ht }); return;
+      }
+      var nested = !!li && /^\s{2,}/.test(line), s = li ? li[1] : l;
+      out.blocks.push({ t: li ? 'li' : 'p', s: s, sub: nested });
+      if (/^(coming from|install)/i.test(sec)) return;
+      var lead = /^\*\*([^*]+)\*\*/.exec(s), title = lead ? lead[1].replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/`/g, '').replace(/[.:,]\s*$/, '').trim() : '';
+      if (title.length > 42) title = title.slice(0, 40).replace(/\s+\S*$/, '') + '…';
+      if (title.length > 32 && title.indexOf(', ') > 12) title = title.slice(0, title.indexOf(', ')); /* keep chips short */
+      if (/fix|behind the scenes/i.test(sec)) {
+        if (li && !nested) { out.fixes++; if (title) out.fixHl.push(title); }
+      } else if (title) out.hl.push(title);
+      else if (!li && !out.intro && !out.hl.length) out.intro = s.replace(/\*\*/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/`/g, '');
     });
+    return out;
+  }
+  function renderNotes(p, box) {
+    var list = null, sub = null;
+    p.blocks.forEach(function (b) {
+      if (b.t === 'gap') { list = sub = null; return; }
+      if (b.t === 'h') { box.appendChild(inline(el('h4'), b.s)); list = sub = null; return; }
+      if (b.t === 'p') { box.appendChild(inline(el('p'), b.s)); list = sub = null; return; }
+      if (b.sub && list && list.lastChild) {
+        if (!sub) { sub = el('ul'); list.lastChild.appendChild(sub); }
+        sub.appendChild(inline(el('li'), b.s)); return;
+      }
+      if (!list) { list = el('ul'); box.appendChild(list); }
+      sub = null; list.appendChild(inline(el('li'), b.s));
+    });
+    if (!box.childNodes.length) box.appendChild(el('p', null, 'No notes for this release.'));
+  }
+  /* The short summary: up to six feature names, then "+N fixes" (or, for a fix-only release, its fixes). */
+  function summary(p) {
+    var items = p.hl.length ? p.hl : p.fixHl, shown = items.slice(0, 6), rest = items.length - shown.length;
+    var tail = '';
+    if (p.hl.length) {
+      if (rest > 0) tail = '+' + rest + ' more';
+      if (p.fixes) tail = (tail ? tail + ', ' : '+') + p.fixes + (p.fixes === 1 ? ' fix' : ' fixes');
+    } else if (p.fixes > shown.length) tail = '+' + (p.fixes - shown.length) + ' more';
+    return { items: shown, tail: tail };
   }
   function inline(e, s) {
     s = s.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/`([^`]+)`/g, '$1');
@@ -1348,26 +1408,104 @@
       f('version').classList.remove('ver-pending');
       T(f('version'), v); T(f('date'), fmtDate(rel.r.published_at)); T(f('size'), fmtSize(rel.asset.size));
       f('link').href = href;
-      T(f('link-label'), 'Download ' + v + (os === 'mac' ? ' (.dmg)' : ' (.exe)'));
+      T(f('link-label'), 'Download ' + v + ' for ' + (os === 'mac' ? 'Mac' : 'Windows'));
+      if (f('link-size')) T(f('link-size'), (os === 'mac' ? '.dmg' : '.exe') + (rel.asset.size ? ' · ' + fmtSize(rel.asset.size) : ''));
       if (hero) hero.href = href;
       if (sub) T(sub, (os === 'mac' ? 'Mac ' : 'Windows ') + v);
     });
-    var ol = $('#timeline');
-    if (!ol) return;
-    ol.textContent = '';
-    c.all.slice(0, 3).forEach(function (x) {
-      var li = el('li'), meta = el('div', 'tl-meta');
-      meta.appendChild(el('span', 'tl-os', x.os === 'mac' ? 'macOS' : 'Windows'));
-      meta.appendChild(el('span', 'ver', versionOf(x.r.tag_name)));
-      var tm = el('time', null, fmtDate(x.r.published_at)); tm.dateTime = x.r.published_at || ''; meta.appendChild(tm);
-      li.appendChild(meta);
-      var body = el('div', 'tl-body'); notes(x.r.body, body);
-      if (!body.childNodes.length) body.appendChild(el('p', null, 'No notes for this release.'));
-      li.appendChild(body);
-      var more = el('div', 'tl-more'), a = el('a', null, 'Release page'); a.href = safeUrl(x.r.html_url) || RELEASES; more.appendChild(a); li.appendChild(more);
-      ol.appendChild(li);
-    });
+    relData = c;
+    timeline();
     T($('#rel-status'), c.all.length ? '' : 'No releases yet.');
+  }
+
+  /* ---- Recent releases: one platform at a time ---- */
+  var relData = null, relOs = 'win', relSeq = 0;
+  function icon(name) {
+    var s = document.createElementNS('http://www.w3.org/2000/svg', 'svg'), u = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    s.setAttribute('class', 'ico'); s.setAttribute('aria-hidden', 'true'); u.setAttribute('href', ICONS + name); s.appendChild(u); return s;
+  }
+  function metaFor(x, latest) {
+    var meta = el('div', 'tl-meta');
+    meta.appendChild(el('span', 'ver', versionOf(x.r.tag_name)));
+    if (latest) meta.appendChild(el('span', 'rel-badge', 'Latest'));
+    var tm = el('time', null, fmtDate(x.r.published_at)); tm.dateTime = x.r.published_at || ''; meta.appendChild(tm);
+    return meta;
+  }
+  function dlHref(x) { return (x.asset && safeUrl(x.asset.browser_download_url)) || safeUrl(x.r.html_url) || RELEASES; }
+  /* Full notes panel, built the first time it is opened. */
+  function notesPanel(x, p) {
+    var body = el('div', 'tl-body'); body.id = 'rel-notes-' + (++relSeq); body.hidden = true;
+    var built = false;
+    return { el: body, toggle: function (btn, open) {
+      if (open && !built) {
+        renderNotes(p, body);
+        var more = el('p', 'tl-more'), a = el('a', null, 'Release page on GitHub'); a.href = safeUrl(x.r.html_url) || RELEASES; more.appendChild(a); body.appendChild(more);
+        built = true;
+      }
+      body.hidden = !open; btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    } };
+  }
+  function latestCard(x) {
+    var p = parseNotes(x.r.body), sm = summary(p), v = versionOf(x.r.tag_name);
+    var li = el('li', 'rel rel-latest'), top = el('div', 'rel-top');
+    top.appendChild(metaFor(x, true));
+    var dl = el('a', 'btn btn-primary'); dl.href = dlHref(x); dl.appendChild(icon('Download'));
+    dl.appendChild(el('span', null, 'Download ' + v));
+    if (x.asset && x.asset.size) dl.appendChild(el('small', null, fmtSize(x.asset.size)));
+    top.appendChild(dl); li.appendChild(top);
+    if (sm.items.length) {
+      var ul = el('ul', 'rel-hl'); ul.setAttribute('aria-label', 'In this release');
+      sm.items.forEach(function (s) { ul.appendChild(el('li', null, s)); });
+      if (sm.tail) ul.appendChild(el('li', 'rel-more', sm.tail));
+      li.appendChild(ul);
+    } else if (p.intro) li.appendChild(el('p', 'rel-intro', p.intro));
+    var panel = notesPanel(x, p), btn = el('button', 'rel-open');
+    btn.type = 'button'; btn.setAttribute('aria-controls', panel.el.id); btn.setAttribute('aria-expanded', 'false');
+    btn.appendChild(el('span', null, 'Full release notes')); btn.appendChild(icon('ChevronRight'));
+    btn.addEventListener('click', function () { panel.toggle(btn, btn.getAttribute('aria-expanded') !== 'true'); });
+    li.appendChild(btn); li.appendChild(panel.el);
+    return li;
+  }
+  function olderRow(x) {
+    var p = parseNotes(x.r.body), sm = summary(p), v = versionOf(x.r.tag_name);
+    var li = el('li', 'rel rel-old'), row = el('div', 'rel-row');
+    row.appendChild(metaFor(x, false));
+    row.appendChild(el('span', 'rel-line', sm.items.length ? sm.items.join(' · ') : p.intro));
+    var dl = el('a', 'rel-dl'); dl.href = dlHref(x); dl.appendChild(icon('Download')); dl.appendChild(el('span', null, 'Download'));
+    dl.setAttribute('aria-label', 'Download ' + v + (x.asset && x.asset.size ? ', ' + fmtSize(x.asset.size) : ''));
+    row.appendChild(dl);
+    var panel = notesPanel(x, p), btn = el('button', 'rel-x');
+    btn.type = 'button'; btn.setAttribute('aria-controls', panel.el.id); btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-label', 'Release notes for ' + v); btn.appendChild(icon('ChevronRight'));
+    row.appendChild(btn);
+    /* The whole row opens the notes; the download link keeps its own click. */
+    row.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('a')) return;
+      panel.toggle(btn, btn.getAttribute('aria-expanded') !== 'true');
+    });
+    li.appendChild(row); li.appendChild(panel.el);
+    return li;
+  }
+  function timeline() {
+    var ol = $('#timeline');
+    if (!ol || !relData) return;
+    ol.textContent = '';
+    var list = relData.all.filter(function (x) { return x.os === relOs; }).slice(0, 5);
+    if (!list.length) {
+      ol.appendChild(el('li', 'rel-empty', relOs === 'mac' ? 'No Mac releases to show yet.' : 'No Windows releases to show yet.'));
+      return;
+    }
+    list.forEach(function (x, i) { ol.appendChild(i ? olderRow(x) : latestCard(x)); });
+  }
+  function initRelSwitch() {
+    var btns = $$('[data-rel-os]');
+    function pick(os) {
+      relOs = os;
+      btns.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-rel-os') === os ? 'true' : 'false'); });
+      timeline();
+    }
+    btns.forEach(function (b) { b.addEventListener('click', function () { pick(b.getAttribute('data-rel-os')); }); });
+    pick(platform() || 'win');
   }
   function initReleases() {
     var os = platform();
@@ -1382,6 +1520,7 @@
       var s = el('span', 'yes'); s.innerHTML = '<svg class="ico" aria-hidden="true"><use href="' + ICONS + 'Check"/></svg>'; s.appendChild(document.createTextNode('Yes')); td.appendChild(s);
     });
     $$('.matrix td[data-no]').forEach(function (td) { td.appendChild(el('span', 'no', 'Not yet')); });
+    initRelSwitch();
 
     var cached = null;
     try { cached = JSON.parse(localStorage.getItem(CACHE) || 'null'); } catch (e) { cached = null; }
@@ -1403,8 +1542,111 @@
     });
   }
 
+  /* Buttons follow the pointer: the highlight sits where the pointer is. One delegated
+     listener; the variables are written on the hovered button only (never a parent), so
+     nothing else restyles. Fine pointers only; touch gets the plain press. */
+  function initButtons() {
+    if (!window.matchMedia || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    var raf = 0, ev = null;
+    document.addEventListener('pointermove', function (e) {
+      ev = e;
+      if (raf) return;
+      raf = requestAnimationFrame(function () {
+        raf = 0;
+        var b = ev.target && ev.target.closest ? ev.target.closest('.btn') : null;
+        if (!b) return;
+        var r = b.getBoundingClientRect();
+        b.style.setProperty('--mx', Math.round(ev.clientX - r.left) + 'px');
+        b.style.setProperty('--my', Math.round(ev.clientY - r.top) + 'px');
+      });
+    }, { passive: true });
+  }
+
+  /* Floating CTA, driven by the scroll position (so it moves exactly as fast as the reader
+     scrolls, and reverses exactly). Over the first MORPH px of scroll the hero's primary
+     button lifts off its slot and travels right and down to the bottom-right corner, narrowing
+     into a 76x104 capsule; its label and icon melt into the fluid on the way (ferro.js reads
+     .melt). As the Download card button comes up from below, the capsule glides onto it and
+     hands over by a short crossfade; scrolling back reverses every step. */
+  function initFloatCta() {
+    var fl = $('#float-cta'); if (!fl) return;
+    var MORPH = 560, CW = 76, CH = 104;
+    var lab = $('.float-label', fl), ico = $('svg', fl), raf = 0, faded = null, shown = false;
+    function heroBtn() { return $('#hero-cta .btn-primary'); }
+    function targetBtn() {
+      var hb = heroBtn(), os = hb && hb.id === 'dl-mac' ? 'mac' : 'win';
+      return $('.card[data-os="' + os + '"] [data-field="link"]');
+    }
+    function sm(a, b, v) { var t = clamp((v - a) / (b - a)); return t * t * (3 - 2 * t); }
+    function lerp(a, b, t) { return a + (b - a) * t; }
+    function fade(tb, o) { if (faded && faded !== tb) faded.style.opacity = ''; faded = tb; if (tb) tb.style.opacity = o == null ? '' : String(o); }
+    /* hand the fluid over between the hero button and the capsule so it is one body of liquid */
+    function pour(from, to) {
+      var a = from && from._ferro, b = to && to._ferro;
+      if (!a || !b || !a.p || !b.p || !a.p.length || !b.p.length) return;
+      for (var i = 0; i < b.p.length; i++) {
+        var s = a.p[Math.floor(i * a.p.length / b.p.length)];
+        b.p[i].x = s.x * b.w / a.w; b.p[i].y = s.y * b.h / a.h; b.p[i].vx = s.vx; b.p[i].vy = s.vy;
+      }
+    }
+    function sync(hb) {
+      fl.href = hb.href;
+      var mac = hb.id === 'dl-mac';
+      fl.setAttribute('aria-label', mac ? 'Download for Mac' : 'Download for Windows');
+      T(lab, mac ? 'Download for Mac' : 'Download for Windows');
+    }
+    function hideFloat(hb) {
+      if (hb.style.visibility) { hb.style.visibility = ''; if (window.__ferroWake) window.__ferroWake(hb._ferro); }   /* always give the hero button back */
+      if (!shown) return;
+      shown = false; pour(fl, hb); fl.hidden = true; if (fl._ferro) fl._ferro.melt = 0;
+    }
+    function update() {
+      raf = 0;
+      var hb = heroBtn(), tb = targetBtn();
+      if (!hb || !tb) return;
+      var vw = document.documentElement.clientWidth, vh = window.innerHeight, gut = vw < 640 ? 16 : 24;
+      if (reduceMq.matches) { hideFloat(hb); fade(null); return; }   /* reduced motion: no travelling button */
+      var q = clamp((window.scrollY || 0) / MORPH);
+      var hr = hb.getBoundingClientRect(), tr = tb.getBoundingClientRect();
+      var p = tr.top < vh ? clamp((vh - tr.top) / (vh * 0.45)) : 0;
+      if (q <= 0) { hideFloat(hb); fade(null); return; }
+      if (p >= 1) { if (shown) { shown = false; fl.hidden = true; } hb.style.visibility = ''; fade(tb, null); return; }
+      if (!shown) {
+        sync(hb); fl.hidden = false; shown = true; pour(hb, fl);
+        if (window.__ferroWake) window.__ferroWake(fl._ferro);
+      }
+      hb.style.visibility = 'hidden';               /* the float stands in for it (and takes focus order) */
+      sync(hb);
+      /* morph: travel (whole range), narrow (second half), label fades as the fluid takes it */
+      var e = sm(0, 1, q), s = sm(0.45, 1, q);
+      var w = lerp(hr.width, CW, s), h = lerp(hr.height, CH, s);
+      var x = lerp(hr.left, vw - gut - w, e), y = lerp(hr.top, vh - gut - h, e);
+      fl.style.width = w.toFixed(1) + 'px'; fl.style.height = h.toFixed(1) + 'px';
+      fl.style.borderRadius = lerp(14, 26, s).toFixed(1) + 'px';
+      fl.style.padding = '0 ' + lerp(28, 0, s).toFixed(1) + 'px';
+      var lo = String(1 - sm(0.06, 0.32, q)); lab.style.opacity = lo; ico.style.opacity = lo;
+      lab.style.display = s > 0.98 ? 'none' : ''; ico.style.display = s > 0.98 ? 'none' : '';
+      if (fl._ferro) { fl._ferro.melt = q < 1 ? q : 0; }
+      /* dock: from the corner onto the card button, crossfading at the end */
+      var o = 1;
+      if (p > 0) {
+        var d = p * p * (3 - 2 * p);
+        x = lerp(x, tr.left + tr.width / 2 - w / 2, d); y = lerp(y, tr.top + tr.height / 2 - h / 2, d);
+        var xf = p > 0.8 ? (p - 0.8) / 0.2 : 0; o = 1 - xf; fade(tb, xf);
+      } else fade(null);
+      fl.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0)';
+      fl.style.opacity = String(o);
+    }
+    function queue() { if (!raf) raf = requestAnimationFrame(update); }
+    window.addEventListener('scroll', queue, { passive: true });
+    window.addEventListener('resize', queue);
+    queue();
+  }
+
   initTheme();
   initDock();
+  initButtons();
+  initFloatCta();
   initReleases();
   $$('[data-stage]').forEach(function (f) { try { Stage(f); } catch (e) { if (window.console) console.error(e); } });
 })();
